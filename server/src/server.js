@@ -4,6 +4,7 @@ import DbConnect from "./helper/DbConnect.js";
 import cookieParser from "cookie-parser";
 import variables from "./config/conf.js";
 import authApi from "./api/auth.js";
+import contentApi from "./api/content.js";
 
 const app = Express();
 app.use(cors());
@@ -29,6 +30,7 @@ app.get("/", (_, res) => {
 //Routing
 
 app.use("/api/auth", authApi);
+app.use("/api/content", contentApi);
 
 app.listen(PORT, async () => {
   try {

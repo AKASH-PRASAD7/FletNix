@@ -5,6 +5,7 @@ import variables from "../config/conf.js";
 const verifyCookie = async (req, res, next) => {
   try {
     const cookie = req.cookies["token"];
+
     if (!cookie) {
       return res
         .status(401)
@@ -13,7 +14,7 @@ const verifyCookie = async (req, res, next) => {
     const token = jwt.verify(cookie, variables.SECRET_KEY);
     const user = await User.findOne({ _id: token.user });
     if (user) {
-      req.body = { userId: user._id, name: user.name, user, ...req.body };
+      req.body = { user };
       next();
     } else {
       return res
