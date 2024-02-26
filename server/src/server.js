@@ -1,14 +1,16 @@
 import Express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import DbConnect from "./helper/DbConnect.js";
-dotenv.config();
+import cookieParser from "cookie-parser";
+import variables from "./config/conf.js";
+import authApi from "./api/auth.js";
 
 const app = Express();
 app.use(cors());
 app.use(Express.json());
+app.use(cookieParser());
 
-app.use((err, req, res, next) => {
+app.use((err, _, res, next) => {
   if (err instanceof SyntaxError) {
     return res.status(400).json({
       success: false,
@@ -18,11 +20,15 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-const PORT = process.env.PORT || 8000;
+const PORT = variables.PORT || 8000;
 
 app.get("/", (_, res) => {
   res.send("FletNix Server is running!");
 });
+
+//Routing
+
+app.use("/api/auth", authApi);
 
 app.listen(PORT, async () => {
   try {
